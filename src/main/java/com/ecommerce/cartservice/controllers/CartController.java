@@ -1,6 +1,7 @@
 package com.ecommerce.cartservice.controllers;
 
-import com.ecommerce.cartservice.dtos.CartDto;
+import com.ecommerce.cartservice.dtos.CartRequestDto;
+import com.ecommerce.cartservice.dtos.CartResponseDto;
 import com.ecommerce.cartservice.services.ICartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @PostMapping
-    public ResponseEntity<CartDto> addToCart(@RequestBody CartDto cartDto) {
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    @PostMapping("/add")
+    public ResponseEntity<CartResponseDto> addToCart(@RequestBody CartRequestDto cartRequestDto) {
+        return new ResponseEntity<>(cartService.addToCart(cartRequestDto.getProductIds(), cartRequestDto.getQuantities()), HttpStatus.CREATED);
     }
 }
