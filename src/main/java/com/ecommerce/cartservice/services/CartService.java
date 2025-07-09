@@ -55,6 +55,8 @@ public class CartService implements ICartService {
     private CartResponseDto fromCart(Cart cart) {
         CartResponseDto cartDto = new CartResponseDto();
         cartDto.setCartId(cart.getId());
+        cartDto.setProductIds(cart.getProductIds());
+        cartDto.setQuantities(cart.getQuantities());
         cartDto.setTotalPrice(cart.getTotalPrice());
         return cartDto;
     }
@@ -80,5 +82,4 @@ public class CartService implements ICartService {
         }
         return totalPrice;
     }
-
 }
