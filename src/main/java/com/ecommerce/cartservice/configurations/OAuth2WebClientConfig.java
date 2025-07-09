@@ -11,8 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class OAuth2WebClientConfig {
 
     @Bean
-    @LoadBalanced  // Enable client-side load balancing
-    public WebClient webClient(
+    @LoadBalanced
+    public WebClient.Builder webClientBuilder(
             ClientRegistrationRepository clientRegistrationRepository,
             OAuth2AuthorizedClientRepository authorizedClientRepository) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
@@ -20,12 +20,8 @@ public class OAuth2WebClientConfig {
                         clientRegistrationRepository, authorizedClientRepository);
         oauth2.setDefaultClientRegistrationId("my-client");
         return WebClient.builder()
-                .apply(oauth2.oauth2Configuration())
-                .filter((request, next) -> {
-                    System.out.println("Request headers: " + request.headers());
-                    return next.exchange(request);
-                })
-                .build();
-
+                .apply(oauth2.oauth2Configuration());
+        // .filter(...) // your other filters if needed
     }
+
 }

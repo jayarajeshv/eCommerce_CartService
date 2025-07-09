@@ -14,11 +14,11 @@ import java.util.List;
 public class CartService implements ICartService {
 
     private final CartRepository cartRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClient;
 
 
 
-    public CartService(CartRepository cartRepository, WebClient webClient) {
+    public CartService(CartRepository cartRepository, WebClient.Builder webClient) {
         this.cartRepository = cartRepository;
         this.webClient = webClient;
     }
@@ -65,11 +65,13 @@ public class CartService implements ICartService {
         for (int i = 0; i < productCount; i++) {
             Long productId = productItems.get(i);
             Integer quantity = quantities.get(i);
-            Product product = webClient.get()
+            Product product = webClient.build()
+                    .get()
                     .uri("http://PRODUCTSERVICE/products/{id}", productId)
                     .retrieve()
                     .bodyToMono(Product.class)
-                    .block(); // Blocks until the result is available
+                    .block();
+            // Blocking call to get the product details
 
             if (product == null) {
                 throw new RuntimeException("Product not found for ID: " + productId);
